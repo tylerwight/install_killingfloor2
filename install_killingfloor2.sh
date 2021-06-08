@@ -16,6 +16,6 @@ sudo ln -s /usr/games/steamcmd steamcmd
 sudo mkdir /mnt/kf2
 sudo chown -R kf2:kf2 /mnt/kf2
 sudo chmod 764 /mnt/kf2
-sudo su -c "steamcmd +login anonymous +force_install_dir /mnt/kf2 +app_update 232130 validate +exit" -s /bin/sh root
+sudo su -c "steamcmd +login anonymous +force_install_dir /mnt/kf2 +app_update 232130 validate +exit" -s /bin/sh kf2
 
 
