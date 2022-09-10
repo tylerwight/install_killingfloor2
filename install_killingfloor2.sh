@@ -45,6 +45,7 @@ KFGAME="${fullpath}/KFGame/Config/LinuxServer-KFGame.ini"
 sudo su -c "cp LinuxServer-KFEngine.ini $KFENGINE" -s /bin/sh $gamename
 sudo su -c "cp LinuxServer-KFGame.ini $KFGAME" -s /bin/sh $gamename
 sudo su -c "cp ./*.sh ${fullpath}" -s /bin/sh $gamename
+sudo rm -rf "${fullpath}/install_killingfloor2.sh"
 
 if test -f "$KFENGINE"; then
 	echo "${KFENGINE} exists"
