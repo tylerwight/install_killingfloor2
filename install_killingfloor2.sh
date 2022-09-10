@@ -1,9 +1,21 @@
 #!/bin/sh
 #Install kf2 dedicated server
 #Tyler Wight
+#Change these these variables to configure what game to install.
+#gamename: this vairable is used for the Linux user created and also the folder structure
+#gamesteamcode: this is the code of the game you want to download
+#installpath: This is the base directory to install the game to. It will add the gamename to the end, so in this example the full path will be /opt/valheim
+#=====================
+gamename=kf2
+gamesteamcode=232130
+installpath="/opt"
+#=====================
 
-sudo adduser kf2
-sudo usermod -aG sudo kf2
+
+fullpath="${installpath}/${gamename}"
+cronjob="*/30 * * * * ${fullpath}/backup.sh"
+sudo adduser $gamename
+sudo usermod -aG sudo $gamename
 sudo apt-get update -y && sudo apt-get upgrade -y
 
 #adding multiverse required to install cmd on 64 bit machines
@@ -13,9 +25,38 @@ sudo dpkg --add-architecture i386
 sudo apt-get update -y
 sudo apt install lib32gcc1 steamcmd -y
 sudo ln -s /usr/games/steamcmd steamcmd
-sudo mkdir /mnt/kf2
-sudo chown -R kf2:kf2 /mnt/kf2
-sudo chmod 764 /mnt/kf2
-sudo su -c "steamcmd +login anonymous +force_install_dir /mnt/kf2 +app_update 232130 validate +exit" -s /bin/sh kf2
+sudo mkdir -p $fullpath
+sudo mkdir "${fullpath}/bak"
 
+#if you write a backup script for your game you can have it copy the script to the install directory, and use the cronjob settings to make them automatic
+#sudo cp -n ./backup.sh $fullpath/backup.sh
 
+sudo chown -R $gamename:$gamename $fullpath
+sudo su -c "steamcmd +login anonymous +force_install_dir ${fullpath} +app_update ${gamesteamcode} validate +exit" -s /bin/sh $gamename
+
+#enable the below line to add the contents of the cronjob variable to the crontab of the user, this preserves all existing crontab entries
+#sudo su -c "(crontab -l| grep -v -F '$cronjob'; echo '$cronjob') | crontab -" -s /bin/sh $gamename
+
+#Replace default config files with included ones with correct maps and mutators
+KFENGINE="${fullpath}/KFGame/Config/LinuxServer-KFEngine.ini"
+KFGAME="${fullpath}/KFGame/Config/LinuxServer-KFGame.ini"
+
+if test -f "$KFENGINE"; then
+	sudo rm $KFENGINE
+	sudo su -c "cp LinuxServer-KFEngine.ini $KFENGINE" -s /bin/sh $gamename
+else
+	echo "can't find KFEngine.ini. Is server installed at ${fullpath}?"
+fi
+
+if test -f "$KFGAME"; then
+	sudo rm $KFGAME
+	sudo su -c "cp LinuxServer-KFGame.ini $KFGAME" -s /bin/sh $gamename
+else
+        echo "can't find KFGame.ini. Is server installed at ${fullpath}?"
+
+fi 
+
+echo "The game ${gamename} has been installed or updated  via steamcmd."
+echo "During the insallation we created a user named ${gamename} and installed the game to location ${fullpath}"
+echo "The steam game code used to download from steam CMD was ${gamesteamcode}"
+echo "You can run this script again to update the game."
