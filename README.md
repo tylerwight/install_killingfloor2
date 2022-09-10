@@ -2,7 +2,7 @@
 
 This script will install killing floor 2 on a Linux Serer. All my testing was done on ubuntu 20.04
 
-This script automatically includes about 6-7 maps we often play, and includes the mutators to play the game with a 16 player limit (instead of 6)
+This script automatically includes about 6-7 maps we often play, and includes the mutators to play the game with a 16 player limit (instead of 6). This do not have to be used and are just part of the config files.
 
 You can start the game normally without 16 player limit with the start_server_normal.sh 
 
