@@ -44,6 +44,28 @@ KFGAME="${fullpath}/KFGame/Config/LinuxServer-KFGame.ini"
 
 sudo su -c "cp LinuxServer-KFEngine.ini $KFENGINE" -s /bin/sh $gamename
 sudo su -c "cp LinuxServer-KFGame.ini $KFGAME" -s /bin/sh $gamename
+sudo su -c "cp ./*.sh ${fullpath}" -s /bin/sh $gamename
+
+if test -f "$KFENGINE"; then
+	echo "${KFENGINE} exists"
+else
+	echo "can't find KFEngine.ini. Config didn't copy for some reason"
+fi
+
+if test -f "$KFGAME"; then
+	echo "${KFGAME} exists"
+else
+        echo "can't find KFGame.ini. Config didn't copy for some reason"
+
+fi
+
+if test -f "${fullpath}/start_server.sh"; then
+	echo "start_server.sh exists in path, copied correctly"
+
+else
+	echo "can't find start_server.sh. Scripts didn't copy for some reason"
+fi
+
 
 echo "The game ${gamename} has been installed or updated  via steamcmd."
 echo "During the insallation we created a user named ${gamename} and installed the game to location ${fullpath}"
