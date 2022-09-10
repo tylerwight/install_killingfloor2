@@ -38,23 +38,12 @@ sudo su -c "steamcmd +login anonymous +force_install_dir ${fullpath} +app_update
 #sudo su -c "(crontab -l| grep -v -F '$cronjob'; echo '$cronjob') | crontab -" -s /bin/sh $gamename
 
 #Replace default config files with included ones with correct maps and mutators
+
 KFENGINE="${fullpath}/KFGame/Config/LinuxServer-KFEngine.ini"
 KFGAME="${fullpath}/KFGame/Config/LinuxServer-KFGame.ini"
 
-if test -f "$KFENGINE"; then
-	sudo rm $KFENGINE
-	sudo su -c "cp LinuxServer-KFEngine.ini $KFENGINE" -s /bin/sh $gamename
-else
-	echo "can't find KFEngine.ini. Is server installed at ${fullpath}?"
-fi
-
-if test -f "$KFGAME"; then
-	sudo rm $KFGAME
-	sudo su -c "cp LinuxServer-KFGame.ini $KFGAME" -s /bin/sh $gamename
-else
-        echo "can't find KFGame.ini. Is server installed at ${fullpath}?"
-
-fi 
+sudo su -c "cp LinuxServer-KFEngine.ini $KFENGINE" -s /bin/sh $gamename
+sudo su -c "cp LinuxServer-KFGame.ini $KFGAME" -s /bin/sh $gamename
 
 echo "The game ${gamename} has been installed or updated  via steamcmd."
 echo "During the insallation we created a user named ${gamename} and installed the game to location ${fullpath}"
